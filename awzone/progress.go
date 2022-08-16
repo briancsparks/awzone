@@ -1,4 +1,4 @@
-package awsone
+package awzone
 
 import (
 	"fmt"

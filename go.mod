@@ -1,4 +1,4 @@
-module github.com/briancsparks/awsone
+module github.com/briancsparks/awzone
 
 go 1.18
 
