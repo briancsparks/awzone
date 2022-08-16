@@ -14,7 +14,7 @@ import (
 )
 
 var cfgFile string
-var programRootName = "awsone"
+var programRootName = "awzone"
 
 // ---------------------------------------------------------------------------------------------------------------------
 // initConfig reads in config file and ENV variables if set.
