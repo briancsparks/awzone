@@ -18,7 +18,8 @@ var uploadCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("upload called", args)
-		awsone.UploadMain([]string{args[0]}, bucket, path)
+		//awsone.UploadMain([]string{args[0]}, bucket, path)
+		awsone.UploadMain(args, bucket, path)
 	},
 }
 

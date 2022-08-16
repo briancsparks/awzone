@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"io"
 	"log"
 	"mime"
 	"net/http"
@@ -31,12 +32,15 @@ func uploadFiles(filenames []string, bucket, path string) error {
 		client = s3.NewFromConfig(cfg)
 	}
 
-	uploadFile(client, filenames[0], bucket, path)
+	numFiles := len(filenames)
+	for i, filename := range filenames {
+		uploadFile(client, filename, bucket, path, i+1, numFiles)
+	}
 
 	return nil
 }
 
-func uploadFile(client *s3.Client, filename, bucket, path string) error {
+func uploadFile(client *s3.Client, filename, bucket, path string, x, y int) error {
 	// Open the file for use
 	file, err := os.Open(filename)
 	if err != nil {
@@ -66,11 +70,16 @@ func uploadFile(client *s3.Client, filename, bucket, path string) error {
 		contentType = mime.TypeByExtension(ext)
 	}
 
+	var r io.Reader = bytes.NewReader(buffer)
+	if size > 1024*1024 {
+		r = io.TeeReader(r, NewProgressCounter(size, x, y, "Uploading "+basename+"..."))
+	}
+
 	output, err := client.PutObject(context.TODO(), &s3.PutObjectInput{
 		Bucket: aws.String(bucket),
 		Key:    aws.String(fmt.Sprintf("%s/%s", path, basename)),
 		//ACL:                "",
-		Body:               bytes.NewReader(buffer),
+		Body:               r,
 		ContentLength:      *aws.Int64(size),
 		ContentType:        aws.String(contentType),
 		ContentDisposition: aws.String("attachment"),
