@@ -4,7 +4,7 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/briancsparks/awsone/awsone"
+	"github.com/briancsparks/awzone/awzone"
 
 	"github.com/spf13/cobra"
 )
@@ -18,8 +18,8 @@ var uploadCmd = &cobra.Command{
 
 	Run: func(cmd *cobra.Command, args []string) {
 		fmt.Println("upload called", args)
-		//awsone.UploadMain([]string{args[0]}, bucket, path)
-		awsone.UploadMain(args, bucket, path)
+		//awzone.UploadMain([]string{args[0]}, bucket, path)
+		awzone.UploadMain(args, bucket, path)
 	},
 }
 
